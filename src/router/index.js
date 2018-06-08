@@ -1,24 +1,29 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import Iview from '@/components/Iview'
 import iView from 'iview';
-import 'iview/dist/styles/iview.css';
+import VueRouter from 'vue-router'
 
-Vue.use(iView)
-Vue.use(Router)
+import {routers} from './router'
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
-      path: '/iview',
-      name: 'iview',
-      component: Iview
-    }
-  ]
-})
+Vue.use(VueRouter)
+
+// 路由配置
+const RouterConfig = {
+  // mode: 'history',
+  routes: routers
+};
+
+export const router = new VueRouter(RouterConfig);
+
+
+router.beforeEach((to, from, next) => {
+  iView.LoadingBar.start();
+    next({
+        name: 'home_index'
+    });
+  
+});
+
+router.afterEach((to) => {
+  iView.LoadingBar.finish();
+  window.scrollTo(0, 0);
+});
